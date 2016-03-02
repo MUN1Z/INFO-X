@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.x.telas;
 
 import java.text.DateFormat;
@@ -10,8 +5,9 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author muniz
+ * Home.java
+ * Tela home do software
+ * @author Felipe Muniz, 2016, INFO-X
  */
 public class Home extends javax.swing.JFrame {
 
@@ -167,6 +163,7 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuCadUsuarioActionPerformed
 
+    //Método que mostra a data atual na sidebar direta do programa
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         Date data = new Date();
         DateFormat formatador = DateFormat.getDateInstance(DateFormat.SHORT);
@@ -174,6 +171,7 @@ public class Home extends javax.swing.JFrame {
         lblData.setText(formatador.format(data));
     }//GEN-LAST:event_formWindowActivated
 
+    //Método bo botão sair (fecha o programa)
     private void menuOpcSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcSairActionPerformed
         int sair = JOptionPane.showConfirmDialog(null, "Têm certeza que deseja sair?", "Atenção", JOptionPane.YES_NO_OPTION);
         if(sair == JOptionPane.YES_OPTION){
