@@ -6,8 +6,9 @@
 package br.com.x.telas;
 
 /**
- *
- * @author muniz
+ * Sobre.java [Tela]
+ * Classe responsável pela Tela de sobre do programa
+ * @author Felipe Muniz, 2016, INFO-X
  */
 public class Sobre extends javax.swing.JFrame {
 
