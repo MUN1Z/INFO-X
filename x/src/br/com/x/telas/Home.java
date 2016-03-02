@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 
 /**
  * Home.java [Tela]
- * Tela home do software
+ * Classe responsável pela Tela home do programa
  * @author Felipe Muniz, 2016, INFO-X
  */
 public class Home extends javax.swing.JFrame {

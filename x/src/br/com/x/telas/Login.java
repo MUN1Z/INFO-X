@@ -6,8 +6,9 @@ import java.awt.Color;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author muniz
+ * Login.java [Tela]
+ * Classe responsável pela Tela de login do programa
+ * @author Felipe Muniz, 2016, INFO-X
  */
 public class Login extends javax.swing.JFrame {
 
@@ -15,6 +16,7 @@ public class Login extends javax.swing.JFrame {
     PreparedStatement pst = null;
     ResultSet rs = null;
 
+    //Método responsavel pela verificação de nivel de usuário ao logar.
     public void logar() {
         String sql = "SELECT * FROM usuarios WHERE login = ? AND senha = ?";
         try {
@@ -31,25 +33,39 @@ public class Login extends javax.swing.JFrame {
                 
                 //System.out.println(nivel);
                 
+                //verifica os niveis de usuario
                 if(nivel.equals("1")){
+                    
+                    //abre a tela home
                     Home home = new Home();
                     home.setVisible(true);
                     
+                    //habilita os seguintes menus se o usuári o tiver o nivel de administrador
                     home.menuCadUsuario.setEnabled(true);
                     home.menuRel.setEnabled(true);
                     
+                    //pega o nome do usuario logado e seta no texto usuario na sidebar direita da tela home
                     home.lblUsuario.setText(usuario);
                     home.lblUsuario.setForeground(Color.red);
                     
+                    //fecha a tela de login
                     this.dispose();
+                    
+                    //encerra a conexão com o banco de dados
                     conexao.close();
                 }else{
+                    
+                    //abre a tela home
                     Home home = new Home();
                     home.setVisible(true);
                    
+                    //pega o nome do usuario logado e seta no texto usuario na sidebar direita da tela home
                     home.lblUsuario.setText(usuario);
                     
+                     //fecha a tela de login
                     this.dispose();
+                    
+                    //encerra a conexão com o banco de dados
                     conexao.close();
                 }
                 
@@ -72,6 +88,7 @@ public class Login extends javax.swing.JFrame {
         conexao = Conexao.conector();
         //System.out.println(conexao);
 
+        //verifica se existe conexão com o banco de dados, se for bem sucedida ele mostra uma imagem de ok, se não ele mostra uma imagem de erro de db na tela de login
         if (conexao != null) {
             lblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/x/icones/dbok.png")));
         } else {
