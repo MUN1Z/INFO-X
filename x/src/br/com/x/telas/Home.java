@@ -5,7 +5,7 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
- * Home.java
+ * Home.java [Tela]
  * Tela home do software
  * @author Felipe Muniz, 2016, INFO-X
  */

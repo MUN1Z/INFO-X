@@ -3,8 +3,9 @@ package br.com.x.dal;
 import java.sql.*;
 
 /**
- *
- * @author muniz
+ * Conexao.java [Modelo dal]
+ * Classe responsável pela conexão com o banco de dados
+ * @author Felipe Muniz, 2016, INFO-X
  */
 public class Conexao {
 
