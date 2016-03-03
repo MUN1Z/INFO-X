@@ -29,6 +29,7 @@ public class Home extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         lblUsuario = new javax.swing.JLabel();
         lblData = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         menu = new javax.swing.JMenuBar();
         menuCad = new javax.swing.JMenu();
         menuCadCliente = new javax.swing.JMenuItem();
@@ -58,6 +59,9 @@ public class Home extends javax.swing.JFrame {
 
         lblData.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         lblData.setText("Data");
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/x/icones/empresa.png"))); // NOI18N
+        jLabel2.setText("jLabel2");
 
         menuCad.setText("Cadastro");
 
@@ -129,25 +133,35 @@ public class Home extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(desktop, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblData)
-                            .addComponent(lblUsuario))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblUsuario)
+                                    .addComponent(lblData))
+                                .addGap(102, 102, 102))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(26, 26, 26)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGap(55, 55, 55)
                 .addComponent(lblUsuario)
-                .addGap(18, 18, 18)
+                .addGap(38, 38, 38)
                 .addComponent(lblData)
-                .addContainerGap(410, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(61, 61, 61))
             .addComponent(desktop)
         );
 
@@ -225,6 +239,7 @@ public class Home extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktop;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblData;
     public static javax.swing.JLabel lblUsuario;
     private javax.swing.JMenuBar menu;
