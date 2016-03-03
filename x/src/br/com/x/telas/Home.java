@@ -159,8 +159,11 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_menuCadOsActionPerformed
 
+    //metodo para abrir o formulario de usuarios
     private void menuCadUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadUsuarioActionPerformed
-        // TODO add your handling code here:
+        Usuario usuario = new Usuario();
+        usuario.setVisible(true);
+        desktop.add(usuario);
     }//GEN-LAST:event_menuCadUsuarioActionPerformed
 
     //Método que mostra a data atual na sidebar direta do programa

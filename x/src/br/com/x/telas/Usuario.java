@@ -31,10 +31,10 @@ public class Usuario extends javax.swing.JInternalFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 531, Short.MAX_VALUE)
+            .addGap(0, 526, Short.MAX_VALUE)
         );
 
-        pack();
+        setBounds(0, 0, 575, 555);
     }// </editor-fold>//GEN-END:initComponents
 
 
