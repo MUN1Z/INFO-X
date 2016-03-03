@@ -1,17 +1,63 @@
 package br.com.x.telas;
 
+import java.sql.*;
+import br.com.x.dal.Conexao;
+
 /**
  * Usuario.java [Tela]
  * Classe responsável pela Tela de Usuario do programa
  * @author Felipe Muniz, 2016, INFO-X
  */
+
 public class Usuario extends javax.swing.JInternalFrame {
 
+    Connection conexao = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    
     /**
      * Creates new form Usuario
      */
     public Usuario() {
         initComponents();
+        conexao = Conexao.conector();
+    }
+    
+    //Método responsavel pela consulta de usuario no banco de dados
+    private void read(){
+        String sql = "SELECT * FROM usuarios WHERE usuario = ?";
+        
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtUsuarioNome.getText());
+
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                String usuario = rs.getString(2);
+                String fone = rs.getString(3);
+                String login = rs.getString(4);
+                String senha = rs.getString(5);
+                String nivel = rs.getString(6);
+                
+                txtUsuarioNome.setText(usuario);
+                txtUsuarioLogin.setText(login);
+                txtUsuarioSenha.setText(senha);
+                txtUsuarioFone.setText(fone);
+                
+                if(nivel == "1"){
+                    cboUsuarioNivel.setSelectedItem(2);
+                }else{
+                    cboUsuarioNivel.setSelectedItem(1); 
+                }
+                
+                
+            }else{
+                
+            }
+        } catch (Exception e) {
+        }
+        
     }
 
     /**
@@ -106,6 +152,11 @@ public class Usuario extends javax.swing.JInternalFrame {
         btnUsuarioRead.setToolTipText("Consultar");
         btnUsuarioRead.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUsuarioRead.setPreferredSize(new java.awt.Dimension(80, 80));
+        btnUsuarioRead.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuarioReadActionPerformed(evt);
+            }
+        });
 
         btnUsuarioUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/x/icones/update.png"))); // NOI18N
         btnUsuarioUpdate.setToolTipText("Alterar");
@@ -206,6 +257,10 @@ public class Usuario extends javax.swing.JInternalFrame {
     private void txtUsuarioFoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioFoneActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsuarioFoneActionPerformed
+
+    private void btnUsuarioReadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioReadActionPerformed
+        read();
+    }//GEN-LAST:event_btnUsuarioReadActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
