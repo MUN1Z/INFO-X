@@ -2,19 +2,19 @@ package br.com.x.telas;
 
 import java.sql.*;
 import br.com.x.dal.Conexao;
+import javax.swing.JOptionPane;
 
 /**
- * Usuario.java [Tela]
- * Classe responsável pela Tela de Usuario do programa
+ * Usuario.java [Tela] Classe responsável pela Tela de Usuario do programa
+ *
  * @author Felipe Muniz, 2016, INFO-X
  */
-
 public class Usuario extends javax.swing.JInternalFrame {
 
     Connection conexao = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
-    
+
     /**
      * Creates new form Usuario
      */
@@ -22,11 +22,11 @@ public class Usuario extends javax.swing.JInternalFrame {
         initComponents();
         conexao = Conexao.conector();
     }
-    
+
     //Método responsavel pela consulta de usuario no banco de dados
-    private void read(){
+    private void read() {
         String sql = "SELECT * FROM usuarios WHERE usuario = ?";
-        
+
         try {
             pst = conexao.prepareStatement(sql);
             pst.setString(1, txtUsuarioNome.getText());
@@ -39,25 +39,55 @@ public class Usuario extends javax.swing.JInternalFrame {
                 String login = rs.getString(4);
                 String senha = rs.getString(5);
                 String nivel = rs.getString(6);
-                
+
                 txtUsuarioNome.setText(usuario);
                 txtUsuarioLogin.setText(login);
                 txtUsuarioSenha.setText(senha);
                 txtUsuarioFone.setText(fone);
                 
-                if(nivel == "1"){
-                    cboUsuarioNivel.setSelectedItem(2);
-                }else{
-                    cboUsuarioNivel.setSelectedItem(1); 
+                if (nivel.equals("2")) {
+                    cboUsuarioNivel.setSelectedIndex(0);
+                } else {
+                    cboUsuarioNivel.setSelectedIndex(1);
                 }
-                
-                
-            }else{
-                
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Usuário não cadastrado!");
             }
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
         }
-        
+
+    }
+
+    //Método responsavel pelo cadastro de usuario no banco de dados
+    private void create() {
+
+        String sql = "INSERT INTO usuarios(usuario,fone,login,senha,nivel) VALUES(?,?,?,?,?)";
+
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtUsuarioNome.getText());
+            pst.setString(2, txtUsuarioFone.getText());
+            pst.setString(3, txtUsuarioLogin.getText());
+            pst.setString(4, txtUsuarioSenha.getText());
+
+            if (cboUsuarioNivel.getSelectedItem().toString() == "Administrador") {
+                pst.setString(5, "1");
+                System.out.println("1");
+            } else {
+                pst.setString(5, "2");
+                System.out.println("2");
+            }
+
+            pst.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
     }
 
     /**
@@ -142,6 +172,11 @@ public class Usuario extends javax.swing.JInternalFrame {
         btnUsuarioCreate.setToolTipText("Adicionar");
         btnUsuarioCreate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUsuarioCreate.setPreferredSize(new java.awt.Dimension(80, 80));
+        btnUsuarioCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuarioCreateActionPerformed(evt);
+            }
+        });
 
         btnUsuarioDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/x/icones/delete.png"))); // NOI18N
         btnUsuarioDelete.setToolTipText("Deletar");
@@ -261,6 +296,10 @@ public class Usuario extends javax.swing.JInternalFrame {
     private void btnUsuarioReadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioReadActionPerformed
         read();
     }//GEN-LAST:event_btnUsuarioReadActionPerformed
+
+    private void btnUsuarioCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioCreateActionPerformed
+        create();
+    }//GEN-LAST:event_btnUsuarioCreateActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
