@@ -53,6 +53,14 @@ public class Usuario extends javax.swing.JInternalFrame {
 
             } else {
                 JOptionPane.showMessageDialog(null, "Usuário não cadastrado!");
+                
+                //Limpa os campos após o erro!
+                txtUsuarioNome.setText("");
+                txtUsuarioLogin.setText("");
+                txtUsuarioSenha.setText("");
+                txtUsuarioFone.setText("");
+                cboUsuarioNivel.setSelectedIndex(0);
+                
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
@@ -80,9 +88,20 @@ public class Usuario extends javax.swing.JInternalFrame {
                 System.out.println("2");
             }
 
-            pst.executeUpdate();
+            int adicionado = pst.executeUpdate();
             
-            JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+            if(adicionado > 0){
+                
+               JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+               
+               //Limpa os campos após o cadastro!
+                txtUsuarioNome.setText("");
+                txtUsuarioLogin.setText("");
+                txtUsuarioSenha.setText("");
+                txtUsuarioFone.setText("");
+                cboUsuarioNivel.setSelectedIndex(0);
+               
+            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
