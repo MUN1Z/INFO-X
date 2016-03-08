@@ -34,6 +34,7 @@ public class Usuario extends javax.swing.JInternalFrame {
             rs = pst.executeQuery();
 
             if (rs.next()) {
+
                 String usuario = rs.getString(2);
                 String fone = rs.getString(3);
                 String login = rs.getString(4);
@@ -44,7 +45,7 @@ public class Usuario extends javax.swing.JInternalFrame {
                 txtUsuarioLogin.setText(login);
                 txtUsuarioSenha.setText(senha);
                 txtUsuarioFone.setText(fone);
-                
+
                 if (nivel.equals("2")) {
                     cboUsuarioNivel.setSelectedIndex(0);
                 } else {
@@ -53,14 +54,14 @@ public class Usuario extends javax.swing.JInternalFrame {
 
             } else {
                 JOptionPane.showMessageDialog(null, "Usuário não cadastrado!");
-                
+
                 //Limpa os campos após o erro!
                 txtUsuarioNome.setText("");
                 txtUsuarioLogin.setText("");
                 txtUsuarioSenha.setText("");
                 txtUsuarioFone.setText("");
                 cboUsuarioNivel.setSelectedIndex(0);
-                
+
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
@@ -82,27 +83,31 @@ public class Usuario extends javax.swing.JInternalFrame {
 
             if (cboUsuarioNivel.getSelectedItem().toString() == "Administrador") {
                 pst.setString(5, "1");
-                System.out.println("1");
             } else {
                 pst.setString(5, "2");
-                System.out.println("2");
             }
 
-            int adicionado = pst.executeUpdate();
-            
-            if(adicionado > 0){
+            //Verifica se os campos obrigatórios foram preenchidos
+            if (txtUsuarioNome.getText().isEmpty() || txtUsuarioLogin.getText().isEmpty() || txtUsuarioSenha.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios! *");
+            } else {
                 
-               JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
-               
-               //Limpa os campos após o cadastro!
-                txtUsuarioNome.setText("");
-                txtUsuarioLogin.setText("");
-                txtUsuarioSenha.setText("");
-                txtUsuarioFone.setText("");
-                cboUsuarioNivel.setSelectedIndex(0);
-               
-            }
+                int adicionado = pst.executeUpdate();
+                
+                if (adicionado > 0) {
 
+                    JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+
+                    //Limpa os campos após o cadastro!
+                    txtUsuarioNome.setText("");
+                    txtUsuarioLogin.setText("");
+                    txtUsuarioSenha.setText("");
+                    txtUsuarioFone.setText("");
+                    cboUsuarioNivel.setSelectedIndex(0);
+
+                }
+
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -132,6 +137,7 @@ public class Usuario extends javax.swing.JInternalFrame {
         btnUsuarioDelete = new javax.swing.JButton();
         btnUsuarioRead = new javax.swing.JButton();
         btnUsuarioUpdate = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -139,7 +145,7 @@ public class Usuario extends javax.swing.JInternalFrame {
         setTitle("Usuário");
 
         jLabel2.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
-        jLabel2.setText("Nome");
+        jLabel2.setText("* Nome");
 
         txtUsuarioNome.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         txtUsuarioNome.addActionListener(new java.awt.event.ActionListener() {
@@ -152,7 +158,7 @@ public class Usuario extends javax.swing.JInternalFrame {
         cboUsuarioNivel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Usuario", "Administrador" }));
 
         jLabel7.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
-        jLabel7.setText("Login");
+        jLabel7.setText("* Login");
 
         txtUsuarioLogin.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         txtUsuarioLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -169,7 +175,7 @@ public class Usuario extends javax.swing.JInternalFrame {
         });
 
         jLabel8.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
-        jLabel8.setText("Senha");
+        jLabel8.setText("* Senha");
 
         jLabel9.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         jLabel9.setText("Fone");
@@ -182,7 +188,7 @@ public class Usuario extends javax.swing.JInternalFrame {
         });
 
         jLabel10.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
-        jLabel10.setText("Nivel");
+        jLabel10.setText("* Nivel");
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 44)); // NOI18N
         jLabel1.setText("Cadastro de Usuário");
@@ -217,6 +223,9 @@ public class Usuario extends javax.swing.JInternalFrame {
         btnUsuarioUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         btnUsuarioUpdate.setPreferredSize(new java.awt.Dimension(80, 80));
 
+        jLabel3.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel3.setText("Campos obrigatórios *");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -225,30 +234,35 @@ public class Usuario extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(9, 9, 9)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(9, 9, 9)
-                                        .addComponent(jLabel1))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(26, 26, 26)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtUsuarioLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtUsuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addComponent(txtUsuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(txtUsuarioLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(txtUsuarioFone, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(9, 9, 9)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel1))))
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel9))
-                                .addGap(29, 29, 29)
-                                .addComponent(txtUsuarioFone, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel10))
-                                .addGap(18, 18, 18)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(312, 312, 312)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtUsuarioSenha)
                                     .addComponent(cboUsuarioNivel, 0, 177, Short.MAX_VALUE)))))
@@ -268,7 +282,9 @@ public class Usuario extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(48, 48, 48)
                 .addComponent(jLabel1)
-                .addGap(40, 40, 40)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3)
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtUsuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -330,6 +346,7 @@ public class Usuario extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
