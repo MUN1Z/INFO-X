@@ -173,17 +173,20 @@ public class Usuario extends javax.swing.JInternalFrame {
                 pst = conexao.prepareStatement(sql);
                 pst.setString(1, txtUsuarioId.getText());
 
-                pst.executeUpdate();
+                int deletado = pst.executeUpdate();
 
-                JOptionPane.showMessageDialog(null, "Usuário removido com sucesso!");
+                if (deletado > 0) {
 
-                //Limpa os campos após o cadastro!
-                txtUsuarioNome.setText("");
-                txtUsuarioLogin.setText("");
-                txtUsuarioSenha.setText("");
-                txtUsuarioFone.setText("");
-                cboUsuarioNivel.setSelectedIndex(0);
+                    JOptionPane.showMessageDialog(null, "Usuário removido com sucesso!");
 
+                    //Limpa os campos após o cadastro!
+                    txtUsuarioNome.setText("");
+                    txtUsuarioLogin.setText("");
+                    txtUsuarioSenha.setText("");
+                    txtUsuarioFone.setText("");
+                    cboUsuarioNivel.setSelectedIndex(0);
+
+                }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
