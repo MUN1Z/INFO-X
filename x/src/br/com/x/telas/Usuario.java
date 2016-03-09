@@ -94,9 +94,9 @@ public class Usuario extends javax.swing.JInternalFrame {
             if (txtUsuarioNome.getText().isEmpty() || txtUsuarioLogin.getText().isEmpty() || txtUsuarioSenha.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios! *");
             } else {
-                
+
                 int adicionado = pst.executeUpdate();
-                
+
                 if (adicionado > 0) {
 
                     JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
@@ -116,35 +116,35 @@ public class Usuario extends javax.swing.JInternalFrame {
         }
 
     }
-    
+
     //Método responsavel pela atualização de usuario no banco de dados
-    private void update(){
-        
+    private void update() {
+
         String sql = "UPDATE usuarios SET usuario=?,fone=?,login=?,senha=?,nivel=? WHERE id=?";
-        
+
         try {
-            
+
             pst = conexao.prepareStatement(sql);
             pst.setString(1, txtUsuarioNome.getText());
             pst.setString(2, txtUsuarioFone.getText());
             pst.setString(3, txtUsuarioLogin.getText());
             pst.setString(4, txtUsuarioSenha.getText());
-            
+
             if (cboUsuarioNivel.getSelectedItem().toString() == "Administrador") {
                 pst.setString(5, "1");
             } else {
                 pst.setString(5, "2");
             }
-            
+
             pst.setString(6, txtUsuarioId.getText());
-            
+
             //Verifica se os campos obrigatórios foram preenchidos
             if (txtUsuarioNome.getText().isEmpty() || txtUsuarioLogin.getText().isEmpty() || txtUsuarioSenha.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios! *");
             } else {
-                
+
                 int adicionado = pst.executeUpdate();
-                
+
                 if (adicionado > 0) {
 
                     JOptionPane.showMessageDialog(null, "Usuário Atualizado com sucesso!");
@@ -153,11 +153,43 @@ public class Usuario extends javax.swing.JInternalFrame {
 
             }
 
-            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
-        
+
+    }
+
+    //Método responsavel pela remoção de usuario no banco de dados
+    private void delete() {
+
+        int confirmacao = JOptionPane.showConfirmDialog(null, "Têm certeza que deseja deletar o usúario " + txtUsuarioNome.getText() + " ?", "Atenção", JOptionPane.YES_NO_OPTION);
+
+        if (confirmacao == JOptionPane.YES_OPTION) {
+
+            String sql = "DELETE FROM usuarios WHERE id = ?";
+
+            try {
+
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, txtUsuarioId.getText());
+
+                pst.executeUpdate();
+
+                JOptionPane.showMessageDialog(null, "Usuário removido com sucesso!");
+
+                //Limpa os campos após o cadastro!
+                txtUsuarioNome.setText("");
+                txtUsuarioLogin.setText("");
+                txtUsuarioSenha.setText("");
+                txtUsuarioFone.setText("");
+                cboUsuarioNivel.setSelectedIndex(0);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+
+        }
+
     }
 
     /**
@@ -254,6 +286,11 @@ public class Usuario extends javax.swing.JInternalFrame {
         btnUsuarioDelete.setToolTipText("Deletar");
         btnUsuarioDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUsuarioDelete.setPreferredSize(new java.awt.Dimension(80, 80));
+        btnUsuarioDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuarioDeleteActionPerformed(evt);
+            }
+        });
 
         btnUsuarioRead.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/x/icones/read.png"))); // NOI18N
         btnUsuarioRead.setToolTipText("Consultar");
@@ -278,7 +315,7 @@ public class Usuario extends javax.swing.JInternalFrame {
         jLabel3.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jLabel3.setText("Campos obrigatórios *");
 
-        txtUsuarioId.setFont(new java.awt.Font("Ubuntu", 0, 3)); // NOI18N
+        txtUsuarioId.setFont(new java.awt.Font("Ubuntu", 0, 1)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -399,6 +436,10 @@ public class Usuario extends javax.swing.JInternalFrame {
     private void btnUsuarioUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioUpdateActionPerformed
         update();
     }//GEN-LAST:event_btnUsuarioUpdateActionPerformed
+
+    private void btnUsuarioDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioDeleteActionPerformed
+        delete();
+    }//GEN-LAST:event_btnUsuarioDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
