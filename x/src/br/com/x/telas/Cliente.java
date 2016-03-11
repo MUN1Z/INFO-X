@@ -211,15 +211,15 @@ public class Cliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtClienteFoneActionPerformed
 
     private void btnClienteCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteCreateActionPerformed
-        create();
+        
     }//GEN-LAST:event_btnClienteCreateActionPerformed
 
     private void btnClienteDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteDeleteActionPerformed
-        delete();
+        
     }//GEN-LAST:event_btnClienteDeleteActionPerformed
 
     private void btnClienteUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteUpdateActionPerformed
-        update();
+        
     }//GEN-LAST:event_btnClienteUpdateActionPerformed
 
     private void txtClienteEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClienteEmailActionPerformed
