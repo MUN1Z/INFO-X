@@ -14,8 +14,8 @@ import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 
 /**
- * Cliente.java [Tela] 
  * Classe responsável pela Tela de Usuario do programa
+ *
  * @author Felipe Muniz, 2016, INFO-X
  */
 public class Cliente extends javax.swing.JInternalFrame {
@@ -23,7 +23,7 @@ public class Cliente extends javax.swing.JInternalFrame {
     Connection conexao = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
-    
+
     /**
      * Creates new form Cliente
      */
@@ -31,8 +31,27 @@ public class Cliente extends javax.swing.JInternalFrame {
         initComponents();
         conexao = Conexao.conector();
     }
-    
-     //Método responsavel pelo cadastro de clientes no banco de dados
+
+    //Método responsavel por pesquisar clientes pelo nome com filtreo avançado
+    private void Read() {
+
+        String sql = "SELECT * FROM clientes WHERE nome LIKE ?";
+
+        try {
+            pst = conexao.prepareStatement(sql);
+            
+            pst.setString(1, txtClientePesquisa.getText() + '%');
+            rs = pst.executeQuery();
+            
+            tblClientes.setModel(DbUtils.resultSetToTableModel(rs));
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        
+    }
+
+    //Método responsavel pelo cadastro de clientes no banco de dados
     private void create() {
 
         String sql = "INSERT INTO clientes(nome,endereco,fone,email) VALUES(?,?,?,?)";
@@ -43,7 +62,6 @@ public class Cliente extends javax.swing.JInternalFrame {
             pst.setString(2, txtClienteEndereco.getText());
             pst.setString(3, txtClienteFone.getText());
             pst.setString(4, txtClienteEmail.getText());
-
 
             //Verifica se os campos obrigatórios foram preenchidos
             if (txtClienteNome.getText().isEmpty() || txtClienteFone.getText().isEmpty()) {
@@ -93,7 +111,7 @@ public class Cliente extends javax.swing.JInternalFrame {
         txtClienteEmail = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblClientes = new javax.swing.JTable();
-        txtClientePesquisar = new javax.swing.JTextField();
+        txtClientePesquisa = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(588, 654));
@@ -187,6 +205,12 @@ public class Cliente extends javax.swing.JInternalFrame {
         ));
         jScrollPane2.setViewportView(tblClientes);
 
+        txtClientePesquisa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtClientePesquisaKeyReleased(evt);
+            }
+        });
+
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/x/icones/pesquisar.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -218,7 +242,7 @@ public class Cliente extends javax.swing.JInternalFrame {
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtClientePesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtClientePesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -254,7 +278,7 @@ public class Cliente extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(9, 9, 9)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtClientePesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtClientePesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -309,20 +333,24 @@ public class Cliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtClienteFoneActionPerformed
 
     private void btnClienteCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteCreateActionPerformed
-            create();
+        create();
     }//GEN-LAST:event_btnClienteCreateActionPerformed
 
     private void btnClienteDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteDeleteActionPerformed
-        
+
     }//GEN-LAST:event_btnClienteDeleteActionPerformed
 
     private void btnClienteUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteUpdateActionPerformed
-        
+
     }//GEN-LAST:event_btnClienteUpdateActionPerformed
 
     private void txtClienteEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClienteEmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtClienteEmailActionPerformed
+
+    private void txtClientePesquisaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtClientePesquisaKeyReleased
+        Read();
+    }//GEN-LAST:event_txtClientePesquisaKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -342,6 +370,6 @@ public class Cliente extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtClienteEndereco;
     private javax.swing.JTextField txtClienteFone;
     private javax.swing.JTextField txtClienteNome;
-    private javax.swing.JTextField txtClientePesquisar;
+    private javax.swing.JTextField txtClientePesquisa;
     // End of variables declaration//GEN-END:variables
 }
