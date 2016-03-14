@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
+import net.proteanit.sql.DbUtils;
+
 /**
  * Cliente.java [Tela] 
  * Classe responsável pela Tela de Usuario do programa
