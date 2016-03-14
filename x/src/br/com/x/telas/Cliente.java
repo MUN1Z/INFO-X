@@ -103,7 +103,7 @@ public class Cliente extends javax.swing.JInternalFrame {
     //Método responsavel pela atualização de cliente no banco de dados
     private void update() {
 
-        String sql = "UPDATE clientes SET nome=?,endereco=?,fone=?,email=?, WHERE id=?";
+        String sql = "UPDATE clientes SET nome=?,endereco=?,fone=?,email=? WHERE id_cliente = ? ";
 
         try {
 
@@ -131,6 +131,41 @@ public class Cliente extends javax.swing.JInternalFrame {
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
+        }
+
+    }
+    
+     //Método responsavel pela remoção de cliente no banco de dados
+    private void delete() {
+
+        int confirmacao = JOptionPane.showConfirmDialog(null, "Têm certeza que deseja deletar o cliente " + txtClienteNome.getText() + " ?", "Atenção", JOptionPane.YES_NO_OPTION);
+
+        if (confirmacao == JOptionPane.YES_OPTION) {
+
+            String sql = "DELETE FROM clientes WHERE id_cliente = ?";
+
+            try {
+
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, lblClienteId.getText());
+
+                int deletado = pst.executeUpdate();
+
+                if (deletado > 0) {
+
+                    JOptionPane.showMessageDialog(null, "Cliente removido com sucesso!");
+
+                    //Limpa os campos após o delete!
+                    txtClienteNome.setText("");
+                    txtClienteEndereco.setText("");
+                    txtClienteFone.setText("");
+                    txtClienteEmail.setText("");
+
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+
         }
 
     }
@@ -379,7 +414,7 @@ public class Cliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnClienteCreateActionPerformed
 
     private void btnClienteDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteDeleteActionPerformed
-
+        delete();
     }//GEN-LAST:event_btnClienteDeleteActionPerformed
 
     private void btnClienteUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteUpdateActionPerformed
