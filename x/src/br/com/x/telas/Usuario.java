@@ -3,6 +3,7 @@ package br.com.x.telas;
 import java.sql.*;
 import br.com.x.dal.Conexao;
 import javax.swing.JOptionPane;
+import net.proteanit.sql.DbUtils;
 
 /**
  * Usuario.java [Tela] 
@@ -25,51 +26,38 @@ public class Usuario extends javax.swing.JInternalFrame {
 
     //Método responsavel pela consulta de usuario no banco de dados
     private void read() {
-        String sql = "SELECT * FROM usuarios WHERE usuario = ?";
+
+        String sql = "SELECT * FROM usuarios WHERE usuario LIKE ?";
 
         try {
             pst = conexao.prepareStatement(sql);
-            pst.setString(1, txtUsuarioNome.getText());
 
+            pst.setString(1, txtUsuarioPesquisa.getText() + '%');
             rs = pst.executeQuery();
 
-            if (rs.next()) {
+            tblUsuarios.setModel(DbUtils.resultSetToTableModel(rs));
 
-                String id = rs.getString(1);
-                String usuario = rs.getString(2);
-                String fone = rs.getString(3);
-                String login = rs.getString(4);
-                String senha = rs.getString(5);
-                String nivel = rs.getString(6);
-
-                txtUsuarioId.setText(id);
-                txtUsuarioNome.setText(usuario);
-                txtUsuarioLogin.setText(login);
-                txtUsuarioSenha.setText(senha);
-                txtUsuarioFone.setText(fone);
-
-                if (nivel.equals("2")) {
-                    cboUsuarioNivel.setSelectedIndex(0);
-                } else {
-                    cboUsuarioNivel.setSelectedIndex(1);
-                }
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Usuário não cadastrado!");
-
-                //Limpa os campos após o erro!
-                txtUsuarioId.setText("");
-                txtUsuarioNome.setText("");
-                txtUsuarioLogin.setText("");
-                txtUsuarioSenha.setText("");
-                txtUsuarioFone.setText("");
-                cboUsuarioNivel.setSelectedIndex(0);
-
-            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
 
+    }
+    
+    //Método responsavel por setar os campos do usuario com a tabela
+    private void setFields() {
+        int setar = tblUsuarios.getSelectedRow();
+        
+        txtUsuarioId.setText(tblUsuarios.getModel().getValueAt(setar, 0).toString());
+        txtUsuarioNome.setText(tblUsuarios.getModel().getValueAt(setar, 1).toString());
+        txtUsuarioLogin.setText(tblUsuarios.getModel().getValueAt(setar, 2).toString());
+        txtUsuarioSenha.setText(tblUsuarios.getModel().getValueAt(setar, 3).toString());
+        txtUsuarioFone.setText(tblUsuarios.getModel().getValueAt(setar, 4).toString());
+        
+        if(tblUsuarios.getModel().getValueAt(setar, 5).toString().equals("1")){
+            cboUsuarioNivel.setSelectedItem("Administrador");
+        }else if(tblUsuarios.getModel().getValueAt(setar, 5).toString().equals("2")){
+             cboUsuarioNivel.setSelectedItem("Usuario");
+        }
     }
 
     //Método responsavel pelo cadastro de usuario no banco de dados
@@ -215,14 +203,13 @@ public class Usuario extends javax.swing.JInternalFrame {
         jLabel10 = new javax.swing.JLabel();
         btnUsuarioCreate = new javax.swing.JButton();
         btnUsuarioDelete = new javax.swing.JButton();
-        btnUsuarioRead = new javax.swing.JButton();
         btnUsuarioUpdate = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtUsuarioId = new javax.swing.JLabel();
-        txtClientePesquisa = new javax.swing.JTextField();
+        txtUsuarioPesquisa = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblClientes = new javax.swing.JTable();
+        tblUsuarios = new javax.swing.JTable();
 
         setClosable(true);
         setIconifiable(true);
@@ -294,16 +281,6 @@ public class Usuario extends javax.swing.JInternalFrame {
             }
         });
 
-        btnUsuarioRead.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/x/icones/read.png"))); // NOI18N
-        btnUsuarioRead.setToolTipText("Consultar");
-        btnUsuarioRead.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUsuarioRead.setPreferredSize(new java.awt.Dimension(80, 80));
-        btnUsuarioRead.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUsuarioReadActionPerformed(evt);
-            }
-        });
-
         btnUsuarioUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/x/icones/update.png"))); // NOI18N
         btnUsuarioUpdate.setToolTipText("Alterar");
         btnUsuarioUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
@@ -319,9 +296,15 @@ public class Usuario extends javax.swing.JInternalFrame {
 
         txtUsuarioId.setFont(new java.awt.Font("Ubuntu", 0, 1)); // NOI18N
 
+        txtUsuarioPesquisa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtUsuarioPesquisaKeyReleased(evt);
+            }
+        });
+
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/x/icones/pesquisar.png"))); // NOI18N
 
-        tblClientes.setModel(new javax.swing.table.DefaultTableModel(
+        tblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -332,7 +315,12 @@ public class Usuario extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(tblClientes);
+        tblUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblUsuariosMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblUsuarios);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -342,29 +330,16 @@ public class Usuario extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnUsuarioCreate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnUsuarioDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnUsuarioRead, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnUsuarioUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(24, 24, 24))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtUsuarioId))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtUsuarioId))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtClientePesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(4, 4, 4)
-                                .addComponent(jLabel5)
-                                .addGap(168, 168, 168)
-                                .addComponent(jLabel3)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(txtUsuarioPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addComponent(jLabel5)
+                        .addGap(168, 168, 168)
+                        .addComponent(jLabel3))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -373,6 +348,11 @@ public class Usuario extends javax.swing.JInternalFrame {
                                 .addGap(9, 9, 9)))
                         .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtUsuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtUsuarioSenha)
+                                    .addComponent(cboUsuarioNivel, 0, 160, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(txtUsuarioLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -380,15 +360,15 @@ public class Usuario extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(214, 214, 214))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtUsuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtUsuarioSenha)
-                                        .addComponent(cboUsuarioNivel, 0, 160, Short.MAX_VALUE)))
-                                .addGap(29, 29, 29))))))
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(btnUsuarioCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUsuarioUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUsuarioDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -399,13 +379,11 @@ public class Usuario extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
-                            .addComponent(txtClientePesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtUsuarioPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtUsuarioId)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -423,11 +401,10 @@ public class Usuario extends javax.swing.JInternalFrame {
                     .addComponent(jLabel10)
                     .addComponent(cboUsuarioNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(btnUsuarioUpdate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUsuarioRead, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUsuarioCreate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUsuarioDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnUsuarioUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUsuarioCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUsuarioDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -450,10 +427,6 @@ public class Usuario extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsuarioFoneActionPerformed
 
-    private void btnUsuarioReadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioReadActionPerformed
-        read();
-    }//GEN-LAST:event_btnUsuarioReadActionPerformed
-
     private void btnUsuarioCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioCreateActionPerformed
         create();
     }//GEN-LAST:event_btnUsuarioCreateActionPerformed
@@ -466,11 +439,18 @@ public class Usuario extends javax.swing.JInternalFrame {
         delete();
     }//GEN-LAST:event_btnUsuarioDeleteActionPerformed
 
+    private void txtUsuarioPesquisaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioPesquisaKeyReleased
+        read();
+    }//GEN-LAST:event_txtUsuarioPesquisaKeyReleased
+
+    private void tblUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUsuariosMouseClicked
+       setFields();
+    }//GEN-LAST:event_tblUsuariosMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnUsuarioCreate;
     private javax.swing.JButton btnUsuarioDelete;
-    private javax.swing.JButton btnUsuarioRead;
     private javax.swing.JButton btnUsuarioUpdate;
     private javax.swing.JComboBox cboUsuarioNivel;
     private javax.swing.JLabel jLabel10;
@@ -482,12 +462,12 @@ public class Usuario extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSlider jSlider1;
-    private javax.swing.JTable tblClientes;
-    private javax.swing.JTextField txtClientePesquisa;
+    private javax.swing.JTable tblUsuarios;
     private javax.swing.JTextField txtUsuarioFone;
     private javax.swing.JLabel txtUsuarioId;
     private javax.swing.JTextField txtUsuarioLogin;
     private javax.swing.JTextField txtUsuarioNome;
+    private javax.swing.JTextField txtUsuarioPesquisa;
     private javax.swing.JTextField txtUsuarioSenha;
     // End of variables declaration//GEN-END:variables
 }
