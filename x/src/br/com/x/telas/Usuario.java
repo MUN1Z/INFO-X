@@ -5,8 +5,8 @@ import br.com.x.dal.Conexao;
 import javax.swing.JOptionPane;
 
 /**
- * Usuario.java [Tela] Classe responsável pela Tela de Usuario do programa
- *
+ * Usuario.java [Tela] 
+ * Classe responsável pela Tela de Usuario do programa
  * @author Felipe Muniz, 2016, INFO-X
  */
 public class Usuario extends javax.swing.JInternalFrame {
