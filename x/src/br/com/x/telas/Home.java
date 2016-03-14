@@ -67,6 +67,11 @@ public class Home extends javax.swing.JFrame {
 
         menuCadCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         menuCadCliente.setText("Cliente");
+        menuCadCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCadClienteActionPerformed(evt);
+            }
+        });
         menuCad.add(menuCadCliente);
 
         menuCadOs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
@@ -200,6 +205,12 @@ public class Home extends javax.swing.JFrame {
         Sobre sobre = new Sobre();
         sobre.setVisible(true);
     }//GEN-LAST:event_menuAjudaSobreActionPerformed
+
+    private void menuCadClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadClienteActionPerformed
+        Cliente cliente = new Cliente();
+        cliente.setVisible(true);
+        desktop.add(cliente);
+    }//GEN-LAST:event_menuCadClienteActionPerformed
 
     /**
      * @param args the command line arguments
