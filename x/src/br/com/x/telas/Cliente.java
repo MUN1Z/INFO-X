@@ -39,16 +39,26 @@ public class Cliente extends javax.swing.JInternalFrame {
 
         try {
             pst = conexao.prepareStatement(sql);
-            
+
             pst.setString(1, txtClientePesquisa.getText() + '%');
             rs = pst.executeQuery();
-            
+
             tblClientes.setModel(DbUtils.resultSetToTableModel(rs));
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
+
+    }
+
+    //Método responsavel por setar os campos do cliente com a tabela
+    private void setFields() {
+        int setar = tblClientes.getSelectedRow();
         
+        txtClienteNome.setText(tblClientes.getModel().getValueAt(setar, 1).toString());
+        txtClienteEndereco.setText(tblClientes.getModel().getValueAt(setar, 2).toString());
+        txtClienteFone.setText(tblClientes.getModel().getValueAt(setar, 3).toString());
+        txtClienteEmail.setText(tblClientes.getModel().getValueAt(setar, 4).toString());
     }
 
     //Método responsavel pelo cadastro de clientes no banco de dados
@@ -202,6 +212,11 @@ public class Cliente extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblClientesMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblClientes);
 
         txtClientePesquisa.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -336,6 +351,10 @@ public class Cliente extends javax.swing.JInternalFrame {
     private void txtClientePesquisaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtClientePesquisaKeyReleased
         Read();
     }//GEN-LAST:event_txtClientePesquisaKeyReleased
+
+    private void tblClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClientesMouseClicked
+        setFields();
+    }//GEN-LAST:event_tblClientesMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
