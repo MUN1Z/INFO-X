@@ -409,7 +409,7 @@ public class Usuario extends javax.swing.JInternalFrame {
                 .addGap(155, 155, 155))
         );
 
-        setBounds(0, 0, 575, 555);
+        setBounds(0, 0, 575, 570);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtUsuarioNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioNomeActionPerformed
