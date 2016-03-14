@@ -113,6 +113,9 @@ public class Cliente extends javax.swing.JInternalFrame {
         txtClientePesquisa = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
 
+        setClosable(true);
+        setIconifiable(true);
+        setTitle("Clientes");
         setPreferredSize(new java.awt.Dimension(588, 654));
 
         jLabel3.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
